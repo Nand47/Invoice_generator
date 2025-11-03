@@ -49,7 +49,7 @@ def generate_pdf(request, invoice_id):
     doc = SimpleDocTemplate(buffer, pagesize=letter)
     styles = getSampleStyleSheet()
     story = []
-
+    
     # Similar PDF generation as before, adapted for Django
     story.append(Paragraph("Invoice", styles['Title']))
     story.append(Spacer(1, 12))

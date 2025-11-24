@@ -12,6 +12,32 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Invoice
 
 
+from django.shortcuts import render, redirect
+from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+from .forms import RegisterForm
+
+
+
+
+def register(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user) # Log the user in immediately
+            return redirect('home')  # Redirect to the home page
+    else:
+        form = RegisterForm()
+    
+    return render(request, 'registration/register.html', {'form': form})
+
+@login_required
+def home(request):
+    return render(request, 'home.html')
+
+
+
 
 def invoice_list(request):
     invoices = Invoice.objects.all()
@@ -105,3 +131,7 @@ def delete_invoice(request, invoice_id):
         except Invoice.DoesNotExist:
             return JsonResponse({'error': 'Invoice not found'}, status=404)
     return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
+
+ 
